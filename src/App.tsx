@@ -30,6 +30,7 @@ const App = () => {
     setGuesses([]);
     setCorrectWord(pickRandom(words));
     setCheatMode(false);
+    setGameWon(false);
 
     showNotification({
       title: "Game reset",
