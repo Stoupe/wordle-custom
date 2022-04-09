@@ -1,12 +1,15 @@
-name: add-issue-to-project
+name: Add To GitHub Projects Beta
+
 on:
   issues:
-    types: [opened]
+    types:
+      - opened
 jobs:
-  createCard:
+  add-to-project-backlog:
+    name: Add issue to project
     runs-on: ubuntu-latest
     steps:
-      - uses: peter-evans/create-or-update-project-card@v2
+      - uses: actions/add-to-project@main
         with:
-          project-name: wordle-custom
-          column-name: Backlog
+          project-url: https://github.com/users/Stoupe/projects/7
+          github-token: ${{ secrets.GH_ACTIONS_ADD_TO_PROJECT_KEY }}
