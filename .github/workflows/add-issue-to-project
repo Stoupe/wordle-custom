@@ -1,0 +1,12 @@
+name: add-issue-to-project
+on:
+  issues:
+    types: [opened]
+jobs:
+  createCard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: peter-evans/create-or-update-project-card@v2
+        with:
+          project-name: wordle-custom
+          column-name: Backlog
