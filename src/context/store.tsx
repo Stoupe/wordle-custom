@@ -174,9 +174,11 @@ export const useGameState = (
 
   useEffect(() => {
     const timer = Date.now();
-    fetch("https://random-word-api.herokuapp.com/all")
+    // Word list taken from https://random-word-api.herokuapp.com/all
+    fetch("./src/data/words.json")
       .then((res) => res.json())
       .then((words: string[]) => {
+        console.log(words)
         setWordList(words);
         showNotification({
           message:
