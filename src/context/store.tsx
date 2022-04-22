@@ -10,6 +10,7 @@ import {
 import { Refresh } from "tabler-icons-react";
 import { GameState, Tile } from "../models/gameState";
 import { pickRandom } from "../utils";
+import wordListJson from "../data/words.json";
 
 const defaultGameState: GameState = {
   maxGuesses: 5,
@@ -211,18 +212,19 @@ export const useGameState = (
   useEffect(() => {
     const timer = Date.now();
     // Word list taken from https://random-word-api.herokuapp.com/all
-    fetch("./src/data/words.json")
-      .then((res) => res.json())
-      .then((words: string[]) => {
-        console.log(words);
-        setWordList(words);
-        showNotification({
-          message:
-            "Took " + (Date.now() - timer) / 1000 + " seconds to fetch words",
-          title: "Words Fetched",
-        });
-        setGameState((state) => setLoading(false, state));
-      });
+    // fetch("./src/data/words.json")
+    // .then((res) =  res.json())
+    // .then((words: string[]) => {
+    const words = wordListJson;
+    console.log(words);
+    setWordList(words);
+    showNotification({
+      message:
+        "Took " + (Date.now() - timer) / 1000 + " seconds to fetch words",
+      title: "Words Fetched",
+    });
+    setGameState((state) => setLoading(false, state));
+    // });
   }, []);
 
   useEffect(() => {
