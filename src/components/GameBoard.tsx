@@ -20,6 +20,8 @@ const GameBoard = () => {
     prevGuesses,
     wordLength,
     wordList,
+    cheatMode,
+    correctWord,
   } = useGameContext();
 
   const guessKey = (e: KeyboardEvent) => {
@@ -27,7 +29,7 @@ const GameBoard = () => {
       backspaceGuess();
     } else if (e.key === "Enter") {
       makeGuess();
-    } else if (e.key.match(/^[a-zA-Z]$/) && currentGuess.length < 5) {
+    } else if (e.key.match(/^[a-zA-Z]$/) && currentGuess.length < wordLength) {
       addToCurrentGuess(e.key);
     }
   };
@@ -76,7 +78,7 @@ const GameBoard = () => {
         alignItems: "center",
         gap: "1rem",
         borderRadius: "1rem",
-        width: "32rem",
+        minWidth: "32rem",
         minHeight: "25rem",
       })}
       tabIndex={0}
@@ -90,6 +92,10 @@ const GameBoard = () => {
           size: "lg",
         }}
       />
+
+      <Text weight="bold" align="center">
+        {cheatMode ? correctWord : correctWord?.split("").map((l) => "")}
+      </Text>
 
       {!loading &&
         [...Array(maxGuesses)].map((_, i) => (

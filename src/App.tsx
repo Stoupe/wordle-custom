@@ -1,11 +1,22 @@
-import { Button, Center, Text } from "@mantine/core";
+import { Button, Center } from "@mantine/core";
 import { Refresh } from "tabler-icons-react";
 import "./App.css";
 import GameBoard from "./components/GameBoard";
+import NumberSelector from "./components/NumberSelector";
 import { useGameContext } from "./context/store";
 
 const App = () => {
-  const { cheatMode, correctWord, resetGame } = useGameContext();
+  const {
+    cheatMode,
+    correctWord,
+    resetGame,
+    wordLength,
+    setWordLength,
+    maxGuesses,
+    setMaxGuesses,
+    generateNewGame,
+    settings,
+  } = useGameContext();
 
   return (
     <>
@@ -31,20 +42,27 @@ const App = () => {
             gap: "1rem",
           })}
         >
-          <Text weight="bold">
-            Word:{" "}
+          {/* <Text weight="bold">
             {cheatMode ? correctWord : correctWord?.split("").map((l) => "?")}
-          </Text>
-          <Text>Letters</Text>
-          <Text>Guesses</Text>
+          </Text> */}
+          <NumberSelector
+            title="Letters"
+            value={settings.wordLength}
+            onChange={setWordLength}
+          />
+          <NumberSelector
+            title="Guesses"
+            value={settings.maxGuesses}
+            onChange={setMaxGuesses}
+          />
           <Button
             variant="filled"
             radius="md"
             color="dark"
-            leftIcon={<Refresh />}
-            onClick={resetGame}
+            rightIcon={<Refresh />}
+            onClick={generateNewGame}
           >
-            Reset
+            Generate
           </Button>
         </Center>
         <GameBoard />

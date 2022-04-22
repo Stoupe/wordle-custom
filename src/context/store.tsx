@@ -97,7 +97,7 @@ const makeGuess = (gameState: GameState, wordList: string[]): GameState => {
   const { currentGuess, correctWord } = newState;
   const guess: string = currentGuess.map((letter) => letter.letter).join("");
 
-  if (guess === "cheat") {
+  if (guess.startsWith("cheat")) {
     newState.cheatMode = true;
   }
 
@@ -165,12 +165,48 @@ const resetGame = (resetState: GameState): GameState => {
   return newState;
 };
 
+const setWordLength = (state: GameState, newLength: number): GameState => {
+  const newState = cloneDeep(state);
+  newState.wordLength = newLength;
+  return newState;
+};
+
+const setMaxGuesses = (state: GameState, newMaxGuesses: number): GameState => {
+  const newState = cloneDeep(state);
+  newState.maxGuesses = newMaxGuesses;
+  return newState;
+};
+
+const generateNewGame = (
+  state: GameState,
+  initial: GameState,
+  wordList: string[],
+  settings: { maxGuesses: number; wordLength: number }
+): GameState => {
+  const newState = cloneDeep(state);
+  newState.loading = false;
+  newState.gameWon = false;
+  newState.cheatMode = false;
+  newState.currentGuess = [];
+  newState.prevGuesses = [];
+  newState.maxGuesses = settings.maxGuesses;
+  newState.wordLength = settings.wordLength;
+  newState.correctWord = pickRandom(
+    wordList.filter((word) => word.length === settings.wordLength)
+  );
+  return newState;
+};
+
 export const useGameState = (
   initial: GameState = defaultGameState,
   initialWordList = []
 ) => {
   const [gameState, setGameState] = useState<GameState>(initial);
   const [wordList, setWordList] = useState<string[]>(initialWordList);
+  const [settings, setSettings] = useState<{
+    maxGuesses: number;
+    wordLength: number;
+  }>({ maxGuesses: initial.maxGuesses, wordLength: initial.wordLength });
 
   useEffect(() => {
     const timer = Date.now();
@@ -178,7 +214,7 @@ export const useGameState = (
     fetch("./src/data/words.json")
       .then((res) => res.json())
       .then((words: string[]) => {
-        console.log(words)
+        console.log(words);
         setWordList(words);
         showNotification({
           message:
@@ -223,6 +259,20 @@ export const useGameState = (
       setGameState((state) => setCorrectWordRandomly(state, wordList)),
     wordList,
     setWordList: (wordList: string[]) => setWordList(wordList),
+    // setWordLength: (newLength: number) =>
+    //   setGameState(setWordLength(gameState, newLength)),
+    // setMaxGuesses: (newMaxGuesses: number) =>
+    //   setGameState(setMaxGuesses(gameState, newMaxGuesses)),
+    setWordLength: (newLength: number) =>
+      setSettings((prev) => ({ ...prev, wordLength: newLength })),
+    setMaxGuesses: (newMaxGuesses: number) =>
+      setSettings((prev) => ({ ...prev, maxGuesses: newMaxGuesses })),
+    generateNewGame: () =>
+      setGameState((state) =>
+        generateNewGame(state, initial, wordList, settings)
+      ),
+    settings,
+    setSettings,
   };
 };
 
