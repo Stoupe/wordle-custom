@@ -4,14 +4,17 @@ import "./index.css";
 import App from "./App";
 import { NotificationsProvider } from "@mantine/notifications";
 import { GameProvider } from "./context/store";
+import { MantineProvider } from "@mantine/core";
 
 ReactDOM.render(
   <React.StrictMode>
-    <NotificationsProvider position="top-right">
-      <GameProvider>
-        <App />
-      </GameProvider>
-    </NotificationsProvider>
+    <MantineProvider theme={{ colorScheme: "dark" }} withGlobalStyles>
+      <NotificationsProvider position="top-right">
+        <GameProvider>
+          <App />
+        </GameProvider>
+      </NotificationsProvider>
+    </MantineProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

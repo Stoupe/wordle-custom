@@ -10,10 +10,10 @@ const App = () => {
   return (
     <>
       <Center
-        sx={(theme) => ({
+        sx={({ colorScheme, colors, white }) => ({
           width: "100vw",
           height: "100vh",
-          background: theme.colors.gray["9"],
+          background: colorScheme === "dark" ? colors.dark["6"] : white,
           display: "flex",
           flexDirection: "column",
           gap: "1rem",
@@ -22,14 +22,21 @@ const App = () => {
         <Center
           px={"1rem"}
           py={"1rem"}
-          sx={(theme) => ({
-            background: theme.colors.gray["8"],
+          sx={({ colorScheme, colors }) => ({
+            background:
+              colorScheme === "dark" ? colors.dark["5"] : colors.gray["3"],
             borderRadius: "1rem",
             width: "32rem",
             justifyContent: "space-between",
             gap: "1rem",
           })}
         >
+          <Text weight="bold">
+            Word:{" "}
+            {cheatMode ? correctWord : correctWord?.split("").map((l) => "?")}
+          </Text>
+          <Text>Letters</Text>
+          <Text>Guesses</Text>
           <Button
             variant="filled"
             radius="md"
@@ -39,10 +46,6 @@ const App = () => {
           >
             Reset
           </Button>
-          <Text color="white" weight="bold">
-            Word:{" "}
-            {cheatMode ? correctWord : correctWord?.split("").map((l) => "?")}
-          </Text>
         </Center>
         <GameBoard />
       </Center>

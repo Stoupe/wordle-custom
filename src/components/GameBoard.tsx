@@ -66,8 +66,9 @@ const GameBoard = () => {
 
   return (
     <Box
-      sx={(theme) => ({
-        background: theme.colors.gray["8"],
+      sx={({ colorScheme, colors }) => ({
+        background:
+          colorScheme === "dark" ? colors.dark["5"] : colors.gray["3"],
         padding: "4rem",
         display: "flex",
         flexDirection: "column",
