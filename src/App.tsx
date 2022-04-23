@@ -1,16 +1,19 @@
 import { Button, Center } from "@mantine/core";
-import { cleanNotifications, showNotification } from "@mantine/notifications";
+import { cleanNotifications } from "@mantine/notifications";
 import { Refresh } from "tabler-icons-react";
 import "./App.css";
 import GameBoard from "./components/GameBoard";
 import NumberSelector from "./components/NumberSelector";
-import { useGameContext } from "./context/store";
-import { useAppDispatch } from "./hooks/redux";
-import { generateNewGame } from "./slices/gameStateSlice";
+import { useAppDispatch, useAppSelector } from "./hooks/redux";
+import {
+  selectGameCreationState,
+  setMaxGuesses,
+  setWordLength,
+} from "./state/gameCreationState";
+import { generateNewGame } from "./state/gameState";
 
 const App = () => {
-  const { setWordLength, setMaxGuesses, options } = useGameContext();
-
+  const options = useAppSelector(selectGameCreationState);
   const dispatch = useAppDispatch();
 
   return (
@@ -40,12 +43,12 @@ const App = () => {
           <NumberSelector
             title="Letters"
             value={options.wordLength}
-            onChange={setWordLength}
+            onChange={(newLength) => dispatch(setWordLength(newLength))}
           />
           <NumberSelector
             title="Guesses"
             value={options.maxGuesses}
-            onChange={setMaxGuesses}
+            onChange={(newMaxGuesses) => dispatch(setMaxGuesses(newMaxGuesses))}
           />
           <Button
             variant="filled"

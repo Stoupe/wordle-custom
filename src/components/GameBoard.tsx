@@ -1,24 +1,37 @@
-import { Box, Group, LoadingOverlay, Text } from "@mantine/core";
+import {
+  Box,
+  Button,
+  FloatingTooltip,
+  Group,
+  LoadingOverlay,
+  Text,
+  Tooltip,
+} from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import confetti from "canvas-confetti";
 import { useEffect } from "react";
-import { Check, Confetti, ExclamationMark, MoodCry } from "tabler-icons-react";
-import { useGameContext } from "../context/store";
+import {
+  Check,
+  Confetti,
+  ExclamationMark,
+  Eye,
+  EyeOff,
+  MoodCry,
+} from "tabler-icons-react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { selectGameCreationState } from "../state/gameCreationState";
 import {
   addToCurrentGuess,
   backspaceGuess,
   generateNewGame,
   processGuess,
   selectGameState,
-  setLoading,
-} from "../slices/gameStateSlice";
+  toggleCheatMode,
+} from "../state/gameState";
 import { asString, isValidGuess } from "../utils";
 import LetterBox from "./LetterBox";
 
 const GameBoard = () => {
-  const { options } = useGameContext();
-
   const {
     isLoading,
     currentGuess,
@@ -31,6 +44,8 @@ const GameBoard = () => {
     correctWord,
     gameWordList,
   } = useAppSelector(selectGameState);
+
+  const options = useAppSelector(selectGameCreationState);
 
   const dispatch = useAppDispatch();
 
@@ -148,6 +163,7 @@ const GameBoard = () => {
         borderRadius: "1rem",
         minWidth: "32rem",
         minHeight: "25rem",
+        paddingBottom: "1rem",
       })}
       tabIndex={0}
     >
@@ -160,12 +176,6 @@ const GameBoard = () => {
           size: "lg",
         }}
       />
-
-      {cheatMode && (
-        <Text weight="bold" align="center">
-          {correctWord}
-        </Text>
-      )}
 
       {!isLoading &&
         [...Array(maxGuesses)].map((_, i) => (
@@ -184,6 +194,28 @@ const GameBoard = () => {
             ))}
           </Group>
         ))}
+
+      <Text
+        color="dark"
+        onClick={() => dispatch(toggleCheatMode())}
+        sx={{
+          cursor: "pointer",
+          marginTop: "0.2rem",
+        }}
+      >
+        <Tooltip
+          withArrow
+          label={
+            cheatMode
+              ? correctWord
+              : Array.from({ length: wordLength }).map((_) => "?")
+          }
+          color="dark"
+          position="bottom"
+        >
+          {cheatMode ? <EyeOff /> : <Eye />}
+        </Tooltip>
+      </Text>
     </Box>
   );
 };

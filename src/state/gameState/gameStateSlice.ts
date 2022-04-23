@@ -1,11 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { GameState, Tile } from "../models/gameState";
-import { RootState } from "../store";
-import { getLetterState, pickRandom } from "../utils";
+import { GameState, Tile } from "../../models/gameState";
+import { getLetterState, pickRandom } from "../../utils";
 
 // Word list from https://random-word-api.herokuapp.com/all
-import wordList from "../data/words.json";
-import { CustomGameOptions } from "../context/store";
+import wordList from "../../data/words.json";
+import { CustomGameOptions } from "../gameCreationState";
 
 const initialState: GameState = {
   maxGuesses: 5,
@@ -60,6 +59,9 @@ export const gameStateSlice = createSlice({
     setLoading(state: GameState, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
     },
+    toggleCheatMode: (state: GameState) => {
+      state.cheatMode = !state.cheatMode;
+    },
     processGuess: (state: GameState, action: PayloadAction<string>) => {
       const correctWord = state.correctWord;
       if (!correctWord) {
@@ -99,14 +101,15 @@ export const gameStateSlice = createSlice({
   },
 });
 
+// Actions
 export const {
   addToCurrentGuess,
   backspaceGuess,
   generateNewGame,
   processGuess,
   setLoading,
+  toggleCheatMode,
 } = gameStateSlice.actions;
 
-export const selectGameState = (state: RootState) => state.gameState;
-
-export default gameStateSlice.reducer;
+// Reducer
+export const gameStateReducer = gameStateSlice.reducer;
