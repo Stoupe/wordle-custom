@@ -18,7 +18,7 @@ export interface GameState {
   // gameWordList: string[];
 
   correctWord?: string;
-  currentGuess: TileArray;
+  currentGuess: Tile[];
   prevGuesses: Array<Tile[]>;
 }
 
@@ -26,14 +26,4 @@ export interface GameGenerationSettings {
   maxGuesses: number;
   wordLength: number;
   customWord?: string;
-}
-
-class TileArray extends Array<Tile> {
-  constructor() {
-    super();
-  }
-
-  toString(): string {
-    return this.map((tile) => tile.toString()).join("");
-  }
 }
