@@ -19,6 +19,7 @@ const initialState: GameState = {
   correctWord: undefined,
   currentGuess: [],
   prevGuesses: [],
+  //   toString: () => "GameState",
 };
 
 export const gameStateSlice = createSlice({
