@@ -2,44 +2,102 @@ import { Box, Group, LoadingOverlay, Text } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import confetti from "canvas-confetti";
 import React, { useContext, useEffect, useState } from "react";
-import { Refresh, Confetti, Keyboard } from "tabler-icons-react";
+import { Refresh, Confetti, Keyboard, Check } from "tabler-icons-react";
 import { useGameContext, useGameState } from "../context/store";
-import { pickRandom, calculateColor } from "../utils";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import {
+  addToCurrentGuess,
+  backspaceGuess,
+  generateNewGame,
+  processGuess,
+  selectGameState,
+  setLoading,
+} from "../slices/gameStateSlice";
+import { pickRandom, calculateColor, isValidGuess, asString } from "../utils";
 import LetterBox from "./LetterBox";
 
 const GameBoard = () => {
   const {
-    loading,
+    // isLoading,
+    // currentGuess,
+    // maxGuesses,
+    // gameWon,
+    // backspaceGuess,
+    // addToCurrentGuess,
+    // makeGuess,
+    // prevGuesses,
+    // wordLength,
+    wordList,
+    // cheatMode,
+    // correctWord,
+    settings,
+  } = useGameContext();
+
+  const {
+    isLoading,
     currentGuess,
     maxGuesses,
     gameWon,
-    backspaceGuess,
-    addToCurrentGuess,
-    makeGuess,
-    setCorrectWordRandomly,
     prevGuesses,
     wordLength,
-    wordList,
     cheatMode,
     correctWord,
-  } = useGameContext();
+  } = useAppSelector(selectGameState);
+
+  const dispatch = useAppDispatch();
 
   const guessKey = (e: KeyboardEvent) => {
     if (e.key === "Backspace") {
-      backspaceGuess();
+      dispatch(backspaceGuess());
     } else if (e.key === "Enter") {
-      makeGuess();
+      const validResponse = isValidGuess(
+        asString(currentGuess),
+        wordLength,
+        wordList
+      );
+
+      switch (validResponse) {
+        case "VALID":
+          dispatch(processGuess(asString(currentGuess)));
+          break;
+        case "NOT_IN_LIST":
+          showNotification({
+            message: "Word not in word list",
+            color: "red",
+          });
+          break;
+        case "TOO_LONG":
+        case "TOO_SHORT":
+        default:
+          showNotification({
+            message: "Guess must be " + wordLength + " letters long",
+            color: "red",
+          });
+      }
     } else if (e.key.match(/^[a-zA-Z]$/) && currentGuess.length < wordLength) {
-      addToCurrentGuess(e.key);
+      dispatch(addToCurrentGuess(e.key));
     }
   };
 
-  // useEffect(() => {
-  //   if (!loading && wordList.length > 0) {
-  //     console.log("choosing new word");
-  //     setCorrectWordRandomly();
-  //   }
-  // }, [wordList, loading]);
+  useEffect(() => {
+    if (!correctWord) {
+      showNotification({
+        message: "Generating new game...",
+        color: "blue",
+      });
+      dispatch(generateNewGame({ wordList, generationSettings: settings }));
+      dispatch(setLoading(false));
+    }
+  }, [wordList, settings]);
+
+  useEffect(() => {
+    showNotification({
+      title: "New game generated!",
+      message: "",
+      color: "green",
+      icon: <Check />,
+    });
+  }, [correctWord]);
 
   useEffect(() => {
     if (gameWon) {
@@ -55,11 +113,12 @@ const GameBoard = () => {
 
   // We need to add the event listener every time the currentGuess changes due to rendering issues
   useEffect(() => {
-    if (loading) return;
+    if (isLoading) return;
+    if (gameWon) return;
 
     window.addEventListener("keydown", guessKey);
     return () => window.removeEventListener("keydown", guessKey);
-  }, [currentGuess, loading]);
+  }, [currentGuess, isLoading]);
 
   // useEffect(() => {
   //   window.addEventListener("keydown", guessKey);
@@ -97,7 +156,7 @@ const GameBoard = () => {
         {cheatMode ? correctWord : correctWord?.split("").map((l) => "")}
       </Text>
 
-      {!loading &&
+      {!isLoading &&
         [...Array(maxGuesses)].map((_, i) => (
           <Group key={i}>
             {[...Array(wordLength)].map((_, j) => (

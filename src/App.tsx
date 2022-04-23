@@ -1,22 +1,21 @@
 import { Button, Center } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import { Refresh } from "tabler-icons-react";
 import "./App.css";
 import GameBoard from "./components/GameBoard";
 import NumberSelector from "./components/NumberSelector";
 import { useGameContext } from "./context/store";
+import { useAppDispatch, useAppSelector } from "./hooks/redux";
+import {
+  generateNewGame,
+  selectGameState,
+  setLoading,
+} from "./slices/gameStateSlice";
 
 const App = () => {
-  const {
-    cheatMode,
-    correctWord,
-    resetGame,
-    wordLength,
-    setWordLength,
-    maxGuesses,
-    setMaxGuesses,
-    generateNewGame,
-    settings,
-  } = useGameContext();
+  const { setWordLength, setMaxGuesses, settings, wordList } = useGameContext();
+
+  const dispatch = useAppDispatch();
 
   return (
     <>
@@ -60,7 +59,11 @@ const App = () => {
             radius="md"
             color="dark"
             rightIcon={<Refresh />}
-            onClick={generateNewGame}
+            onClick={() => {
+              dispatch(
+                generateNewGame({ wordList, generationSettings: settings })
+              );
+            }}
           >
             Generate
           </Button>

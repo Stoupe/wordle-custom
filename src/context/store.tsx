@@ -15,7 +15,7 @@ import wordListJson from "../data/words.json";
 const defaultGameState: GameState = {
   maxGuesses: 5,
   wordLength: 5,
-  loading: true,
+  isLoading: true,
   gameWon: false,
   cheatMode: false,
   correctWord: "",
@@ -87,7 +87,7 @@ const processGuess = (guess: string, gameState: GameState): Tile[] => {
 
   const processedGuess = guess.split("").map((letter, index) => ({
     letter: letter,
-    state: getLetterState(letter, index, guess, correctWord),
+    state: getLetterState(letter, index, guess, correctWord ?? ""),
   }));
 
   return processedGuess;
@@ -118,7 +118,7 @@ const makeGuess = (gameState: GameState, wordList: string[]): GameState => {
 
 const setLoading = (loading: boolean, gameState: GameState): GameState => {
   const newState = cloneDeep(gameState);
-  newState.loading = loading;
+  newState.isLoading = loading;
   return newState;
 };
 
@@ -162,7 +162,7 @@ const isValidGuess = (gameState: GameState, wordList: string[]): boolean => {
 
 const resetGame = (resetState: GameState): GameState => {
   const newState = cloneDeep(resetState);
-  newState.loading = false;
+  newState.isLoading = false;
   return newState;
 };
 
@@ -185,7 +185,7 @@ const generateNewGame = (
   settings: { maxGuesses: number; wordLength: number }
 ): GameState => {
   const newState = cloneDeep(state);
-  newState.loading = false;
+  newState.isLoading = false;
   newState.gameWon = false;
   newState.cheatMode = false;
   newState.currentGuess = [];
