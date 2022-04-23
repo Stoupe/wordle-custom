@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { GameGenerationSettings, GameState, Tile } from "../models/gameState";
+import { GameState, Tile } from "../models/gameState";
 import { RootState } from "../store";
 import { getLetterState, pickRandom } from "../utils";
 
