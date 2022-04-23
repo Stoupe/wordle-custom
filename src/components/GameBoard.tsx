@@ -2,8 +2,14 @@ import { Box, Group, LoadingOverlay, Text } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import confetti from "canvas-confetti";
 import React, { useContext, useEffect, useState } from "react";
-import { Refresh, Confetti, Keyboard, Check } from "tabler-icons-react";
-import { useGameContext, useGameState } from "../context/store";
+import {
+  Refresh,
+  Confetti,
+  Keyboard,
+  Check,
+  ExclamationMark,
+} from "tabler-icons-react";
+import { useGameContext, useCustomState } from "../context/store";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import {
   addToCurrentGuess,
@@ -62,16 +68,24 @@ const GameBoard = () => {
           break;
         case "NOT_IN_LIST":
           showNotification({
-            message: "Word not in word list",
+            title:
+              "Sorry, '" +
+              asString(currentGuess) +
+              "' is not in the word list.",
+            message:
+              "If you think it should be, please request it to be added.",
             color: "red",
+            icon: <ExclamationMark />,
           });
           break;
         case "TOO_LONG":
         case "TOO_SHORT":
         default:
           showNotification({
-            message: "Guess must be " + wordLength + " letters long",
+            title: "Guess must be " + wordLength + " letters long.",
+            message: "",
             color: "red",
+            icon: <ExclamationMark />,
           });
       }
     } else if (e.key.match(/^[a-zA-Z]$/) && currentGuess.length < wordLength) {
@@ -82,7 +96,8 @@ const GameBoard = () => {
   useEffect(() => {
     if (!correctWord) {
       showNotification({
-        message: "Generating new game...",
+        title: "Generating new game...",
+        message: "",
         color: "blue",
       });
       dispatch(generateNewGame({ wordList, generationSettings: settings }));
