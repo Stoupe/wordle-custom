@@ -1,14 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { cloneDeep } from "lodash";
-import { useAppDispatch } from "../hooks/redux";
 import { GameGenerationSettings, GameState, Tile } from "../models/gameState";
 import { RootState } from "../store";
-import {
-  getLetterState,
-  isValidGuess,
-  pickNewWord,
-  pickRandom,
-} from "../utils";
+import { getLetterState, pickNewWord } from "../utils";
 
 const initialState: GameState = {
   maxGuesses: 5,
