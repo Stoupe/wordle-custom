@@ -19,7 +19,6 @@ const initialState: GameState = {
   correctWord: undefined,
   currentGuess: [],
   prevGuesses: [],
-  //   toString: () => "GameState",
 };
 
 export const gameStateSlice = createSlice({
@@ -78,6 +77,7 @@ export const gameStateSlice = createSlice({
           (letter, index): Tile => ({
             letter,
             state: getLetterState(letter, index, guess, correctWord),
+            toString: () => letter,
           })
         ),
       ];

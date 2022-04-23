@@ -3,6 +3,7 @@ export type LetterState = "incorrect" | "wrongLocation" | "correct" | "unknown";
 export interface Tile {
   letter: string | undefined;
   state: LetterState;
+  toString: () => string;
 }
 
 export interface GameState {
@@ -17,7 +18,7 @@ export interface GameState {
   // gameWordList: string[];
 
   correctWord?: string;
-  currentGuess: Tile[];
+  currentGuess: TileArray;
   prevGuesses: Array<Tile[]>;
 }
 
@@ -25,4 +26,14 @@ export interface GameGenerationSettings {
   maxGuesses: number;
   wordLength: number;
   customWord?: string;
+}
+
+class TileArray extends Array<Tile> {
+  constructor() {
+    super();
+  }
+
+  toString(): string {
+    return this.map((tile) => tile.toString()).join("");
+  }
 }

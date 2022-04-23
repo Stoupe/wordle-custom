@@ -11,7 +11,6 @@ export type LetterBoxState = "default" | "green" | "orange";
 const LetterBox = ({ tile }: { tile: Tile | undefined }) => {
   return (
     <Box
-      // style={style}
       sx={(theme) => ({
         padding: "2rem",
         background:

@@ -1,16 +1,12 @@
 import { Button, Center } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
+import { cleanNotifications, showNotification } from "@mantine/notifications";
 import { Refresh } from "tabler-icons-react";
 import "./App.css";
 import GameBoard from "./components/GameBoard";
 import NumberSelector from "./components/NumberSelector";
 import { useGameContext } from "./context/store";
 import { useAppDispatch, useAppSelector } from "./hooks/redux";
-import {
-  generateNewGame,
-  selectGameState,
-  setLoading,
-} from "./slices/gameStateSlice";
+import { generateNewGame } from "./slices/gameStateSlice";
 
 const App = () => {
   const { setWordLength, setMaxGuesses, settings, wordList } = useGameContext();
@@ -23,7 +19,7 @@ const App = () => {
         sx={({ colorScheme, colors, white }) => ({
           width: "100vw",
           height: "100vh",
-          background: colorScheme === "dark" ? colors.dark["6"] : white,
+          background: colorScheme === "dark" ? colors.dark["7"] : white,
           display: "flex",
           flexDirection: "column",
           gap: "1rem",
@@ -34,16 +30,13 @@ const App = () => {
           py={"1rem"}
           sx={({ colorScheme, colors }) => ({
             background:
-              colorScheme === "dark" ? colors.dark["5"] : colors.gray["3"],
+              colorScheme === "dark" ? colors.dark["6"] : colors.gray["3"],
             borderRadius: "1rem",
             width: "32rem",
             justifyContent: "space-between",
             gap: "1rem",
           })}
         >
-          {/* <Text weight="bold">
-            {cheatMode ? correctWord : correctWord?.split("").map((l) => "?")}
-          </Text> */}
           <NumberSelector
             title="Letters"
             value={settings.wordLength}
@@ -60,6 +53,7 @@ const App = () => {
             color="dark"
             rightIcon={<Refresh />}
             onClick={() => {
+              cleanNotifications();
               dispatch(
                 generateNewGame({ wordList, generationSettings: settings })
               );

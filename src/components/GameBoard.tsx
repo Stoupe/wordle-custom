@@ -1,15 +1,9 @@
 import { Box, Group, LoadingOverlay, Text } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import confetti from "canvas-confetti";
-import React, { useContext, useEffect, useState } from "react";
-import {
-  Refresh,
-  Confetti,
-  Keyboard,
-  Check,
-  ExclamationMark,
-} from "tabler-icons-react";
-import { useGameContext, useCustomState } from "../context/store";
+import { useEffect } from "react";
+import { Check, Confetti, ExclamationMark, MoodCry } from "tabler-icons-react";
+import { useGameContext } from "../context/store";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import {
   addToCurrentGuess,
@@ -19,25 +13,11 @@ import {
   selectGameState,
   setLoading,
 } from "../slices/gameStateSlice";
-import { pickRandom, calculateColor, isValidGuess, asString } from "../utils";
+import { asString, isValidGuess } from "../utils";
 import LetterBox from "./LetterBox";
 
 const GameBoard = () => {
-  const {
-    // isLoading,
-    // currentGuess,
-    // maxGuesses,
-    // gameWon,
-    // backspaceGuess,
-    // addToCurrentGuess,
-    // makeGuess,
-    // prevGuesses,
-    // wordLength,
-    wordList,
-    // cheatMode,
-    // correctWord,
-    settings,
-  } = useGameContext();
+  const { wordList, settings } = useGameContext();
 
   const {
     isLoading,
@@ -126,6 +106,22 @@ const GameBoard = () => {
     }
   }, [gameWon]);
 
+  useEffect(() => {
+    if (prevGuesses.length === maxGuesses) {
+      showNotification({
+        title: "Game Over",
+        color: "red",
+        message: (
+          <>
+            You ran out of guesses! The correct word was '<b>{correctWord}</b>'.
+          </>
+        ),
+        autoClose: false,
+        icon: <MoodCry />,
+      });
+    }
+  }, [prevGuesses]);
+
   // We need to add the event listener every time the currentGuess changes due to rendering issues
   useEffect(() => {
     if (isLoading) return;
@@ -133,18 +129,13 @@ const GameBoard = () => {
 
     window.addEventListener("keydown", guessKey);
     return () => window.removeEventListener("keydown", guessKey);
-  }, [currentGuess, isLoading]);
-
-  // useEffect(() => {
-  //   window.addEventListener("keydown", guessKey);
-  //   return () => window.removeEventListener("keydown", guessKey);
-  // }, []);
+  }, [currentGuess, isLoading, gameWon]);
 
   return (
     <Box
       sx={({ colorScheme, colors }) => ({
         background:
-          colorScheme === "dark" ? colors.dark["5"] : colors.gray["3"],
+          colorScheme === "dark" ? colors.dark["6"] : colors.gray["3"],
         padding: "4rem",
         display: "flex",
         flexDirection: "column",
@@ -167,9 +158,11 @@ const GameBoard = () => {
         }}
       />
 
-      <Text weight="bold" align="center">
-        {cheatMode ? correctWord : correctWord?.split("").map((l) => "")}
-      </Text>
+      {cheatMode && (
+        <Text weight="bold" align="center">
+          {correctWord}
+        </Text>
+      )}
 
       {!isLoading &&
         [...Array(maxGuesses)].map((_, i) => (
