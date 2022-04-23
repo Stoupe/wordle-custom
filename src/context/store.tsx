@@ -1,45 +1,24 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import wordListJson from "../data/words.json";
+import { createContext, ReactNode, useContext, useState } from "react";
 
-export const useCustomState = (
-  initialSettings: { maxGuesses: number; wordLength: number },
-  initialWordList = []
-) => {
-  const [wordList, setWordList] = useState<string[]>(initialWordList);
-  const [settings, setSettings] = useState<{
-    maxGuesses: number;
-    wordLength: number;
-  }>({
-    maxGuesses: initialSettings.maxGuesses,
-    wordLength: initialSettings.wordLength,
-  });
+export interface CustomGameOptions {
+  maxGuesses: number;
+  wordLength: number;
+  customWord?: string;
+}
 
-  useEffect(() => {
-    // Word list taken from https://random-word-api.herokuapp.com/all
-    const words = wordListJson;
-    console.log(words);
-    setWordList(words);
-  }, []);
+export const useCustomState = (initialOptions: CustomGameOptions) => {
+  const [options, setOptions] = useState<CustomGameOptions>(initialOptions);
 
   return {
-    wordList,
-    setWordList: (wordList: string[]) => setWordList(wordList),
     setWordLength: (newLength: number) =>
-      setSettings((prev) => ({ ...prev, wordLength: newLength })),
+      setOptions((prev) => ({ ...prev, wordLength: newLength })),
     setMaxGuesses: (newMaxGuesses: number) =>
-      setSettings((prev) => ({ ...prev, maxGuesses: newMaxGuesses })),
-    settings,
-    setSettings,
+      setOptions((prev) => ({ ...prev, maxGuesses: newMaxGuesses })),
+    options,
+    setOptions,
   };
 };
 
-// Context
 const GameContext = createContext<ReturnType<typeof useCustomState> | null>(
   null
 );

@@ -1,17 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GameGenerationSettings, GameState, Tile } from "../models/gameState";
 import { RootState } from "../store";
-import { getLetterState, pickNewWord } from "../utils";
+import { getLetterState, pickRandom } from "../utils";
+
+// Word list from https://random-word-api.herokuapp.com/all
+import wordList from "../data/words.json";
+import { CustomGameOptions } from "../context/store";
 
 const initialState: GameState = {
   maxGuesses: 5,
   wordLength: 5,
   isLoading: true,
   gameWon: false,
+  gameLost: false,
   cheatMode: false,
   correctWord: undefined,
   currentGuess: [],
   prevGuesses: [],
+  gameWordList: undefined,
 };
 
 export const gameStateSlice = createSlice({
@@ -20,21 +26,26 @@ export const gameStateSlice = createSlice({
   reducers: {
     generateNewGame: (
       state: GameState,
-      action: PayloadAction<{
-        wordList: string[];
-        generationSettings: GameGenerationSettings;
-      }>
+      action: PayloadAction<CustomGameOptions>
     ) => {
-      const { wordList, generationSettings } = action.payload;
-      state.maxGuesses = generationSettings.maxGuesses;
-      state.wordLength = generationSettings.wordLength;
+      const generationOptions = action.payload;
+
+      state.maxGuesses = generationOptions.maxGuesses;
+      state.wordLength = generationOptions.wordLength;
 
       state.cheatMode = false;
       state.gameWon = false;
+      state.gameLost = false;
       state.currentGuess = [];
       state.prevGuesses = [];
 
-      state.correctWord = pickNewWord(wordList, generationSettings.wordLength);
+      state.gameWordList = wordList.filter(
+        (word) => word.length === generationOptions.wordLength
+      );
+
+      state.correctWord = pickRandom(state.gameWordList);
+
+      state.isLoading = false;
     },
     addToCurrentGuess: (state: GameState, action: PayloadAction<string>) => {
       if (state.currentGuess.length >= state.wordLength) return;
@@ -70,7 +81,6 @@ export const gameStateSlice = createSlice({
           (letter, index): Tile => ({
             letter,
             state: getLetterState(letter, index, guess, correctWord),
-            toString: () => letter,
           })
         ),
       ];
@@ -79,6 +89,11 @@ export const gameStateSlice = createSlice({
 
       if (guess === correctWord) {
         state.gameWon = true;
+        return;
+      }
+
+      if (state.prevGuesses.length === state.maxGuesses) {
+        state.gameLost = true;
       }
     },
   },

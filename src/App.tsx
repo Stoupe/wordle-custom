@@ -5,11 +5,11 @@ import "./App.css";
 import GameBoard from "./components/GameBoard";
 import NumberSelector from "./components/NumberSelector";
 import { useGameContext } from "./context/store";
-import { useAppDispatch, useAppSelector } from "./hooks/redux";
+import { useAppDispatch } from "./hooks/redux";
 import { generateNewGame } from "./slices/gameStateSlice";
 
 const App = () => {
-  const { setWordLength, setMaxGuesses, settings, wordList } = useGameContext();
+  const { setWordLength, setMaxGuesses, options } = useGameContext();
 
   const dispatch = useAppDispatch();
 
@@ -39,12 +39,12 @@ const App = () => {
         >
           <NumberSelector
             title="Letters"
-            value={settings.wordLength}
+            value={options.wordLength}
             onChange={setWordLength}
           />
           <NumberSelector
             title="Guesses"
-            value={settings.maxGuesses}
+            value={options.maxGuesses}
             onChange={setMaxGuesses}
           />
           <Button
@@ -54,9 +54,7 @@ const App = () => {
             rightIcon={<Refresh />}
             onClick={() => {
               cleanNotifications();
-              dispatch(
-                generateNewGame({ wordList, generationSettings: settings })
-              );
+              dispatch(generateNewGame(options));
             }}
           >
             Generate

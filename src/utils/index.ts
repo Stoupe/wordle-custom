@@ -1,6 +1,5 @@
-import { showNotification } from "@mantine/notifications";
 import { LetterBoxState } from "../components/LetterBox";
-import { GameState, Tile } from "../models/gameState";
+import { Tile } from "../models/gameState";
 
 export const calculateColor = (
   guessedLetter: string,
@@ -33,6 +32,11 @@ export const calculateColor = (
   return "default";
 };
 
+/**
+ * Pick a random string from an array of strings
+ * @param arr Array of strings
+ * @returns the randomly picked string
+ */
 export const pickRandom = (arr: Array<string>): string =>
   arr[Math.floor(Math.random() * arr.length)];
 
@@ -92,13 +96,6 @@ export const getLetterState = (
 
   // Letter either not in the word or already placed elsewhere correctly
   return "incorrect";
-};
-
-export const pickNewWord = (wordList: string[], wordLength: number) => {
-  const word = pickRandom(
-    wordList.filter((word) => word.length === wordLength)
-  );
-  return word;
 };
 
 export const asString = (arr: Array<Tile>): string => {

@@ -17,29 +17,33 @@ import { asString, isValidGuess } from "../utils";
 import LetterBox from "./LetterBox";
 
 const GameBoard = () => {
-  const { wordList, settings } = useGameContext();
+  const { options } = useGameContext();
 
   const {
     isLoading,
     currentGuess,
     maxGuesses,
     gameWon,
+    gameLost,
     prevGuesses,
     wordLength,
     cheatMode,
     correctWord,
+    gameWordList,
   } = useAppSelector(selectGameState);
 
   const dispatch = useAppDispatch();
 
   const guessKey = (e: KeyboardEvent) => {
     if (e.key === "Backspace") {
-      dispatch(backspaceGuess());
+      if (currentGuess.length > 0) {
+        dispatch(backspaceGuess());
+      }
     } else if (e.key === "Enter") {
       const validResponse = isValidGuess(
         asString(currentGuess),
         wordLength,
-        wordList
+        gameWordList ?? []
       );
 
       switch (validResponse) {
@@ -73,17 +77,17 @@ const GameBoard = () => {
     }
   };
 
+  /**
+   * Generate a new game when loaded for the first time
+   */
   useEffect(() => {
-    if (!correctWord) {
-      showNotification({
-        title: "Generating new game...",
-        message: "",
-        color: "blue",
-      });
-      dispatch(generateNewGame({ wordList, generationSettings: settings }));
-      dispatch(setLoading(false));
-    }
-  }, [wordList, settings]);
+    showNotification({
+      title: "Generating new game...",
+      message: "",
+      color: "blue",
+    });
+    dispatch(generateNewGame(options));
+  }, []);
 
   useEffect(() => {
     showNotification({
@@ -107,7 +111,7 @@ const GameBoard = () => {
   }, [gameWon]);
 
   useEffect(() => {
-    if (prevGuesses.length === maxGuesses) {
+    if (gameLost) {
       showNotification({
         title: "Game Over",
         color: "red",
@@ -120,12 +124,11 @@ const GameBoard = () => {
         icon: <MoodCry />,
       });
     }
-  }, [prevGuesses]);
+  }, [gameLost]);
 
   // We need to add the event listener every time the currentGuess changes due to rendering issues
   useEffect(() => {
-    if (isLoading) return;
-    if (gameWon) return;
+    if (isLoading || gameWon || gameLost) return;
 
     window.addEventListener("keydown", guessKey);
     return () => window.removeEventListener("keydown", guessKey);
@@ -151,7 +154,7 @@ const GameBoard = () => {
       <LoadingOverlay
         overlayColor="black"
         overlayOpacity={0.1}
-        visible={wordList.length === 0}
+        visible={isLoading}
         loaderProps={{
           color: "gray",
           size: "lg",
