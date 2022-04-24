@@ -83,22 +83,19 @@ const App = () => {
   }, [correctWord]);
 
   return (
-    <>
-      <Center
-        sx={({ colorScheme, colors, white }) => ({
-          width: '100vw',
-          height: '100vh',
-          background: colorScheme === 'dark' ? colors.dark['7'] : white,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1rem'
-        })}
-      >
-        <HeaderBar />
-
-        <GameBoard />
-      </Center>
-    </>
+    <Center
+      sx={({ colorScheme, colors, white }) => ({
+        width: '100vw',
+        height: '100vh',
+        background: colorScheme === 'dark' ? colors.dark['7'] : white,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem'
+      })}
+    >
+      <HeaderBar />
+      <GameBoard />
+    </Center>
   );
 };
 

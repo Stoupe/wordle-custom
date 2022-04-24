@@ -1,13 +1,5 @@
-import { Box, Button, Container, Group, Text } from '@mantine/core';
-import React from 'react';
-import {
-  ArrowBack,
-  ArrowBarLeft,
-  ArrowBarRight,
-  ArrowForward,
-  Minus,
-  Plus
-} from 'tabler-icons-react';
+import { Box, Button, Group, Text } from '@mantine/core';
+import { Minus, Plus } from 'tabler-icons-react';
 
 interface NumberSelectorProps {
   title: string;
@@ -17,13 +9,18 @@ interface NumberSelectorProps {
 
 const NumberSelector = ({ title, value, onChange }: NumberSelectorProps) => {
   return (
-    <Box>
-      <Text align="center" weight={'bold'}>
-        {title}
-      </Text>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'start',
+        marginTop: '1rem'
+      }}
+    >
+      <Text weight={'bold'}>{title}</Text>
       <Group
         sx={{
-          marginTop: '.5rem'
+          marginTop: '0.5rem'
         }}
       >
         <Button compact color={'dark'} onClick={() => onChange(value - 1)}>

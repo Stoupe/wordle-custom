@@ -21,12 +21,15 @@ export const gameCreationSlice = createSlice({
     },
     setWordLength: (state: CustomGameOptions, action: PayloadAction<number>) => {
       state.wordLength = action.payload;
+    },
+    setCustomWord: (state: CustomGameOptions, action: PayloadAction<string>) => {
+      state.customWord = action.payload;
     }
   }
 });
 
 // Actions
-export const { setMaxGuesses, setWordLength } = gameCreationSlice.actions;
+export const { setMaxGuesses, setWordLength, setCustomWord } = gameCreationSlice.actions;
 
 // Reducer
 export const gameCreationReducer = gameCreationSlice.reducer;

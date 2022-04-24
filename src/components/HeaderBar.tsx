@@ -1,17 +1,19 @@
-import { Button, Center } from '@mantine/core';
+import { Button, Center, Container, Text } from '@mantine/core';
 import { cleanNotifications } from '@mantine/notifications';
+import { useState } from 'react';
 import { Refresh } from 'tabler-icons-react';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { selectGameCreationState, setMaxGuesses, setWordLength } from '../state/gameCreationState';
-import { generateNewGame } from '../state/gameState';
-import constants from '../utils/constants';
-import NumberSelector from './NumberSelector';
+import { selectGameCreationState } from '../state/gameCreationState';
+import { generateNewGame, selectGameState } from '../state/gameState';
+import { CreateCustomGameModal } from './CreateCustomGameModal';
 
 export const HeaderBar = () => {
   const options = useAppSelector(selectGameCreationState);
+  const { maxGuesses, wordLength } = useAppSelector(selectGameState);
   const dispatch = useAppDispatch();
 
-  const { MIN_WORD_LENGTH, MAX_WORD_LENGTH, MAX_GUESSES, MIN_GUESSES } = constants;
+  const [modalOpen, setModalOpen] = useState(false);
+  const closeModal = () => setModalOpen(false);
 
   return (
     <Center
@@ -20,29 +22,29 @@ export const HeaderBar = () => {
       sx={({ colorScheme, colors }) => ({
         background: colorScheme === 'dark' ? colors.dark['6'] : colors.gray['3'],
         borderRadius: '1rem',
-        width: '32rem',
+        minWidth: '32rem',
         justifyContent: 'space-between',
-        gap: '1rem'
+        gap: '3rem'
       })}
     >
-      <NumberSelector
-        title="Letters"
-        value={options.wordLength}
-        onChange={(newLength) =>
-          newLength <= MAX_WORD_LENGTH &&
-          newLength >= MIN_WORD_LENGTH &&
-          dispatch(setWordLength(newLength))
-        }
-      />
-      <NumberSelector
-        title="Guesses"
-        value={options.maxGuesses}
-        onChange={(newMaxGuesses) =>
-          newMaxGuesses >= MIN_GUESSES &&
-          newMaxGuesses <= MAX_GUESSES &&
-          dispatch(setMaxGuesses(newMaxGuesses))
-        }
-      />
+      <CreateCustomGameModal isOpen={modalOpen} onClose={closeModal} />
+
+      <Button
+        variant="gradient"
+        gradient={{ from: 'blue', to: 'purple' }}
+        radius={'md'}
+        onClick={() => setModalOpen(true)}
+      >
+        Create Custom Game
+      </Button>
+
+      <Container>
+        <Text color="grey">Guesses: {maxGuesses}</Text>
+        <Text color="grey">Length: {wordLength}</Text>
+      </Container>
+
+      {/* <Button color="dark">Share</Button> */}
+
       <Button
         variant="filled"
         radius="md"
@@ -53,7 +55,7 @@ export const HeaderBar = () => {
           dispatch(generateNewGame(options));
         }}
       >
-        Generate
+        New Game
       </Button>
     </Center>
   );

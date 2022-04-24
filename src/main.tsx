@@ -1,29 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import { NotificationsProvider } from '@mantine/notifications';
 import { MantineProvider } from '@mantine/core';
+import { NotificationsProvider } from '@mantine/notifications';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { store } from './store';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
+import App from './App';
+import './index.css';
+import { store } from './store';
 
-ReactDOM.render(
+const Main = () => (
   <React.StrictMode>
-    <BrowserRouter>
-      <QueryParamProvider>
-        <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles>
-          <NotificationsProvider position="top-right">
-            <Provider store={store}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <QueryParamProvider>
+          <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles>
+            <NotificationsProvider position="top-right">
               <Routes>
                 <Route path="/" element={<App />} />
               </Routes>
-            </Provider>
-          </NotificationsProvider>
-        </MantineProvider>
-      </QueryParamProvider>
-    </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
+            </NotificationsProvider>
+          </MantineProvider>
+        </QueryParamProvider>
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>
 );
+
+const container = document.getElementById('root');
+const root = createRoot(container!);
+root.render(<Main />);

@@ -38,20 +38,39 @@ export const gameStateSlice = createSlice({
       state.currentGuess = [];
       state.prevGuesses = [];
 
-      state.gameWordList = wordList.filter((word) => word.length === generationOptions.wordLength);
+      const generationType = generationOptions.customWord
+        ? 'custom'
+        : generationOptions.seed
+        ? 'seed'
+        : 'random';
 
-      if (generationOptions.customWord) {
-        if (!state.gameWordList.includes(generationOptions.customWord)) {
-          state.gameWordList.push(generationOptions.customWord);
-        }
-        state.correctWord = generationOptions.customWord;
-        state.wordLength = generationOptions.customWord.length;
-      } else if (generationOptions.seed) {
-        const word = decodeSeed(generationOptions.seed);
-        state.correctWord = word;
-        state.wordLength = word.length;
-      } else {
-        state.correctWord = pickRandom(state.gameWordList);
+      // Set word length
+      switch (generationType) {
+        case 'custom':
+          state.wordLength = generationOptions.customWord!.length;
+          break;
+        case 'seed':
+          state.wordLength = decodeSeed(generationOptions.seed!).length;
+          break;
+        case 'random':
+          state.wordLength = generationOptions.wordLength;
+      }
+
+      state.gameWordList = wordList.filter((word) => word.length === state.wordLength);
+
+      // Set correct word
+      switch (generationType) {
+        case 'custom':
+          if (!state.gameWordList.includes(generationOptions.customWord!)) {
+            state.gameWordList.push(generationOptions.customWord!);
+          }
+          state.correctWord = generationOptions.customWord;
+          break;
+        case 'seed':
+          state.correctWord = decodeSeed(generationOptions.seed!);
+          break;
+        case 'random':
+          state.correctWord = pickRandom(state.gameWordList);
       }
 
       state.isLoading = false;
