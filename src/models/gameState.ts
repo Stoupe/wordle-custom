@@ -1,4 +1,4 @@
-export type LetterState = "incorrect" | "wrongLocation" | "correct" | "unknown";
+export type LetterState = 'incorrect' | 'wrongLocation' | 'correct' | 'unknown';
 
 export interface Tile {
   letter: string | undefined;

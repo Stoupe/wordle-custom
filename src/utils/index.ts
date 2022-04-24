@@ -1,5 +1,5 @@
-import { LetterBoxState } from "../components/LetterBox";
-import { Tile } from "../models/gameState";
+import { LetterBoxState } from '../components/LetterBox';
+import { Tile } from '../models/gameState';
 
 export const calculateColor = (
   guessedLetter: string,
@@ -8,28 +8,28 @@ export const calculateColor = (
   correctWord: string
 ): LetterBoxState => {
   // Letter not in the correct word at all in correct word
-  if (!correctWord.split("").includes(guessedLetter)) {
-    return "default";
+  if (!correctWord.split('').includes(guessedLetter)) {
+    return 'default';
   }
 
   if (correctWord.includes(guessedLetter)) {
     // Correct letter in the correct position
     if (correctWord[index] === guessedLetter) {
-      return "green";
+      return 'green';
     }
 
     // Correct letter which hasn't been guessed yet, but in the wrong position
     const notYetGuessedLetters = correctWord
-      .split("")
+      .split('')
       .filter((letter, i) => guessedWord[i] !== letter);
 
     if (notYetGuessedLetters.includes(guessedLetter)) {
-      return "orange";
+      return 'orange';
     }
   }
 
   // Letter either not in the word or already placed elsewhere correctly
-  return "default";
+  return 'default';
 };
 
 /**
@@ -51,53 +51,46 @@ export const isValidGuess = (
   guess: string,
   expectedLength: number,
   wordList: string[]
-): "VALID" | "TOO_SHORT" | "TOO_LONG" | "NOT_IN_LIST" => {
-  if (guess.length > expectedLength) return "TOO_LONG";
-  if (guess.length < expectedLength) return "TOO_SHORT";
-  if (!wordList.includes(guess)) return "NOT_IN_LIST";
-  return "VALID";
+): 'VALID' | 'TOO_SHORT' | 'TOO_LONG' | 'NOT_IN_LIST' => {
+  if (guess.length > expectedLength) return 'TOO_LONG';
+  if (guess.length < expectedLength) return 'TOO_SHORT';
+  if (!wordList.includes(guess)) return 'NOT_IN_LIST';
+  return 'VALID';
 };
 
 /**
  * Takes in a letter and information about the current guess
  * and returns the state the letter should be in
- * @param letter
- * @param index
- * @param guess
- * @param correctWord
- * @returns
  */
 export const getLetterState = (
   letter: string,
   index: number,
   guess: string,
   correctWord: string
-): Tile["state"] => {
+): Tile['state'] => {
   // Letter not in the correct word at all in correct word
-  if (!correctWord.split("").includes(letter)) {
-    return "incorrect";
+  if (!correctWord.split('').includes(letter)) {
+    return 'incorrect';
   }
 
   if (correctWord.includes(letter)) {
     // Correct letter in the correct position
     if (correctWord[index] === letter) {
-      return "correct";
+      return 'correct';
     }
 
     // Correct letter which hasn't been guessed yet, but in the wrong position
-    const notYetGuessedLetters = correctWord
-      .split("")
-      .filter((letter, i) => guess[i] !== letter);
+    const notYetGuessedLetters = correctWord.split('').filter((letter, i) => guess[i] !== letter);
 
     if (notYetGuessedLetters.includes(letter)) {
-      return "wrongLocation";
+      return 'wrongLocation';
     }
   }
 
   // Letter either not in the word or already placed elsewhere correctly
-  return "incorrect";
+  return 'incorrect';
 };
 
 export const asString = (arr: Array<Tile>): string => {
-  return arr.map((tile) => tile.letter).join("");
+  return arr.map((tile) => tile.letter).join('');
 };

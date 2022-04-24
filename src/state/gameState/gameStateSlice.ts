@@ -1,10 +1,13 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { GameState, Tile } from "../../models/gameState";
-import { getLetterState, pickRandom } from "../../utils";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { GameState, Tile } from '../../models/gameState';
+import { getLetterState, pickRandom } from '../../utils';
 
 // Word list from https://random-word-api.herokuapp.com/all
-import wordList from "../../data/words.json";
-import { CustomGameOptions } from "../gameCreationState";
+import wordList from '../../data/words.json';
+import { CustomGameOptions } from '../gameCreationState';
+import { useSeed } from '../../hooks/useSeed';
+
+const { decodeSeed } = useSeed();
 
 const initialState: GameState = {
   maxGuesses: 5,
@@ -16,17 +19,14 @@ const initialState: GameState = {
   correctWord: undefined,
   currentGuess: [],
   prevGuesses: [],
-  gameWordList: undefined,
+  gameWordList: undefined
 };
 
 export const gameStateSlice = createSlice({
-  name: "gameState",
+  name: 'gameState',
   initialState,
   reducers: {
-    generateNewGame: (
-      state: GameState,
-      action: PayloadAction<CustomGameOptions>
-    ) => {
+    generateNewGame: (state: GameState, action: PayloadAction<CustomGameOptions>) => {
       const generationOptions = action.payload;
 
       state.maxGuesses = generationOptions.maxGuesses;
@@ -38,14 +38,18 @@ export const gameStateSlice = createSlice({
       state.currentGuess = [];
       state.prevGuesses = [];
 
-      state.gameWordList = wordList.filter(
-        (word) => word.length === generationOptions.wordLength
-      );
+      state.gameWordList = wordList.filter((word) => word.length === generationOptions.wordLength);
 
       if (generationOptions.customWord) {
+        if (!state.gameWordList.includes(generationOptions.customWord)) {
+          state.gameWordList.push(generationOptions.customWord);
+        }
         state.correctWord = generationOptions.customWord;
+        state.wordLength = generationOptions.customWord.length;
       } else if (generationOptions.seed) {
-        state.correctWord = state.gameWordList[0];
+        const word = decodeSeed(generationOptions.seed);
+        state.correctWord = word;
+        state.wordLength = word.length;
       } else {
         state.correctWord = pickRandom(state.gameWordList);
       }
@@ -56,7 +60,7 @@ export const gameStateSlice = createSlice({
       if (state.currentGuess.length >= state.wordLength) return;
       if (!action.payload.match(/^[a-zA-Z]$/)) return;
 
-      state.currentGuess.push({ letter: action.payload, state: "unknown" });
+      state.currentGuess.push({ letter: action.payload, state: 'unknown' });
     },
     backspaceGuess: (state: GameState) => {
       if (state.currentGuess.length === 0) return;
@@ -77,7 +81,7 @@ export const gameStateSlice = createSlice({
 
       const guess = action.payload;
 
-      if (guess.startsWith("cheat")) {
+      if (guess.startsWith('cheat')) {
         state.cheatMode = true;
         console.log(correctWord);
       }
@@ -85,12 +89,12 @@ export const gameStateSlice = createSlice({
       state.prevGuesses = [
         ...state.prevGuesses,
 
-        guess.split("").map(
+        guess.split('').map(
           (letter, index): Tile => ({
             letter,
-            state: getLetterState(letter, index, guess, correctWord),
+            state: getLetterState(letter, index, guess, correctWord)
           })
-        ),
+        )
       ];
 
       state.currentGuess = [];
@@ -103,8 +107,8 @@ export const gameStateSlice = createSlice({
       if (state.prevGuesses.length === state.maxGuesses) {
         state.gameLost = true;
       }
-    },
-  },
+    }
+  }
 });
 
 // Actions
@@ -114,7 +118,7 @@ export const {
   generateNewGame,
   processGuess,
   setLoading,
-  toggleCheatMode,
+  toggleCheatMode
 } = gameStateSlice.actions;
 
 // Reducer

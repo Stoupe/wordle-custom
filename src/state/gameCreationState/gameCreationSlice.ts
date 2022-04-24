@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface CustomGameOptions {
   maxGuesses: number;
@@ -9,26 +9,20 @@ export interface CustomGameOptions {
 
 const initialState: CustomGameOptions = {
   maxGuesses: 5,
-  wordLength: 5,
+  wordLength: 5
 };
 
 export const gameCreationSlice = createSlice({
-  name: "gameCreation",
+  name: 'gameCreation',
   initialState,
   reducers: {
-    setMaxGuesses: (
-      state: CustomGameOptions,
-      action: PayloadAction<number>
-    ) => {
+    setMaxGuesses: (state: CustomGameOptions, action: PayloadAction<number>) => {
       state.maxGuesses = action.payload;
     },
-    setWordLength: (
-      state: CustomGameOptions,
-      action: PayloadAction<number>
-    ) => {
+    setWordLength: (state: CustomGameOptions, action: PayloadAction<number>) => {
       state.wordLength = action.payload;
-    },
-  },
+    }
+  }
 });
 
 // Actions
