@@ -1,0 +1,6 @@
+export default {
+  MIN_WORD_LENGTH: 3,
+  MAX_WORD_LENGTH: 15,
+  MIN_GUESSES: 1,
+  MAX_GUESSES: 100
+};

@@ -47,7 +47,7 @@ const GameBoard = (): ReactElement => {
         case 'NOT_IN_LIST':
           showNotification({
             title: `Sorry, '${asString(currentGuess)}' is not in the word list.`,
-            message: 'If you think it should be, please request it to be added.',
+            message: 'If you think it should be, please create an issue on Github.',
             color: 'red',
             icon: <ExclamationMark />
           });
