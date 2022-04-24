@@ -15,11 +15,15 @@
     "@mantine/notifications": "^4.1.4",
     "@reduxjs/toolkit": "^1.8.1",
     "canvas-confetti": "^1.5.1",
+    "hashids": "^2.2.10",
     "lodash": "^4.17.21",
+    "query-string": "^7.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^8.0.1",
-    "tabler-icons-react": "^1.44.0"
+    "react-router-dom": "^6.3.0",
+    "tabler-icons-react": "^1.44.0",
+    "use-query-params": "^1.2.3"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.4.2",

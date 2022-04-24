@@ -4,6 +4,7 @@ export interface CustomGameOptions {
   maxGuesses: number;
   wordLength: number;
   customWord?: string;
+  seed?: string;
 }
 
 const initialState: CustomGameOptions = {

@@ -45,8 +45,6 @@ const GameBoard = () => {
     gameWordList,
   } = useAppSelector(selectGameState);
 
-  const options = useAppSelector(selectGameCreationState);
-
   const dispatch = useAppDispatch();
 
   const guessKey = (e: KeyboardEvent) => {
@@ -91,27 +89,6 @@ const GameBoard = () => {
       dispatch(addToCurrentGuess(e.key));
     }
   };
-
-  /**
-   * Generate a new game when loaded for the first time
-   */
-  useEffect(() => {
-    showNotification({
-      title: "Generating new game...",
-      message: "",
-      color: "blue",
-    });
-    dispatch(generateNewGame(options));
-  }, []);
-
-  useEffect(() => {
-    showNotification({
-      title: "New game generated!",
-      message: "",
-      color: "green",
-      icon: <Check />,
-    });
-  }, [correctWord]);
 
   useEffect(() => {
     if (gameWon) {

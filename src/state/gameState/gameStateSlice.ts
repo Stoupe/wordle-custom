@@ -42,7 +42,13 @@ export const gameStateSlice = createSlice({
         (word) => word.length === generationOptions.wordLength
       );
 
-      state.correctWord = pickRandom(state.gameWordList);
+      if (generationOptions.customWord) {
+        state.correctWord = generationOptions.customWord;
+      } else if (generationOptions.seed) {
+        state.correctWord = state.gameWordList[0];
+      } else {
+        state.correctWord = pickRandom(state.gameWordList);
+      }
 
       state.isLoading = false;
     },
