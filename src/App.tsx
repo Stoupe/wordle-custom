@@ -43,12 +43,18 @@ const App = () => {
           <NumberSelector
             title="Letters"
             value={options.wordLength}
-            onChange={(newLength) => dispatch(setWordLength(newLength))}
+            onChange={(newLength) =>
+              newLength <= 15 &&
+              newLength >= 3 &&
+              dispatch(setWordLength(newLength))
+            }
           />
           <NumberSelector
             title="Guesses"
             value={options.maxGuesses}
-            onChange={(newMaxGuesses) => dispatch(setMaxGuesses(newMaxGuesses))}
+            onChange={(newMaxGuesses) =>
+              newMaxGuesses > 0 && dispatch(setMaxGuesses(newMaxGuesses))
+            }
           />
           <Button
             variant="filled"
