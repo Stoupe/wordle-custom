@@ -5,7 +5,6 @@ module.exports = {
     es2021: true,
     jest: true
   },
-  // extends: ["plugin:react/recommended", "airbnb"],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
