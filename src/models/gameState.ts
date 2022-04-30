@@ -20,4 +20,6 @@ export interface GameState {
   correctWord?: string;
   currentGuess: Tile[];
   prevGuesses: Array<Tile[]>;
+
+  blockInput: boolean;
 }

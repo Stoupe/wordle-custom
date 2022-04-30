@@ -26,7 +26,8 @@ const GameBoard = (): ReactElement => {
     wordLength,
     cheatMode,
     correctWord,
-    gameWordList
+    gameWordList,
+    blockInput
   } = useAppSelector(selectGameState);
 
   const dispatch = useAppDispatch();
@@ -98,11 +99,11 @@ const GameBoard = (): ReactElement => {
 
   // We need to add the event listener every time the currentGuess changes due to rendering issues
   useEffect(() => {
-    if (isLoading || gameWon || gameLost) return () => {};
+    if (isLoading || gameWon || gameLost || blockInput) return () => {};
 
     window.addEventListener('keydown', guessKey);
     return () => window.removeEventListener('keydown', guessKey);
-  }, [currentGuess, isLoading, gameWon]);
+  }, [currentGuess, isLoading, gameWon, blockInput]);
 
   return (
     <Box

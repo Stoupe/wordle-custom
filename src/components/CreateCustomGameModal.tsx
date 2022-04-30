@@ -1,6 +1,7 @@
 import { Button, Container, Group, Modal, Text, TextInput } from '@mantine/core';
 import { useClipboard } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
+import { useEffect } from 'react';
 import { Clipboard } from 'tabler-icons-react';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { useSeed } from '../hooks/useSeed';
@@ -10,7 +11,7 @@ import {
   setMaxGuesses,
   setWordLength
 } from '../state/gameCreationState';
-import { generateNewGame, selectGameState } from '../state/gameState';
+import { generateNewGame, selectGameState, setBlockInput } from '../state/gameState';
 import constants from '../utils/constants';
 import NumberSelector from './NumberSelector';
 
@@ -52,6 +53,14 @@ export const CreateCustomGameModal = ({
     });
     clipboard.copy(url);
   };
+
+  useEffect(() => {
+    dispatch(setBlockInput(isOpen));
+
+    // return () => {
+    //   dispatch(setBlockInput(false));
+    // };
+  }, [isOpen]);
 
   return (
     <Modal

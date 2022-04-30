@@ -19,7 +19,8 @@ const initialState: GameState = {
   correctWord: undefined,
   currentGuess: [],
   prevGuesses: [],
-  gameWordList: undefined
+  gameWordList: undefined,
+  blockInput: false
 };
 
 export const gameStateSlice = createSlice({
@@ -126,6 +127,9 @@ export const gameStateSlice = createSlice({
       if (state.prevGuesses.length === state.maxGuesses) {
         state.gameLost = true;
       }
+    },
+    setBlockInput: (state: GameState, action: PayloadAction<boolean>) => {
+      state.blockInput = action.payload;
     }
   }
 });
@@ -137,7 +141,8 @@ export const {
   generateNewGame,
   processGuess,
   setLoading,
-  toggleCheatMode
+  toggleCheatMode,
+  setBlockInput
 } = gameStateSlice.actions;
 
 // Reducer
