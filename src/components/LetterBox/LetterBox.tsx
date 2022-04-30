@@ -1,5 +1,5 @@
 import { Box, Text, Transition } from '@mantine/core';
-import { Tile } from '../models/gameState';
+import { Tile } from '../../models/gameState';
 
 export type LetterBoxState = 'default' | 'green' | 'orange';
 

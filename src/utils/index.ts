@@ -1,4 +1,4 @@
-import { LetterBoxState } from '../components/LetterBox';
+import { LetterBoxState } from '../components/LetterBox/LetterBox';
 import { Tile } from '../models/gameState';
 
 export const calculateColor = (

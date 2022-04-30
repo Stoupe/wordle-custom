@@ -13,7 +13,7 @@ import {
 } from '../state/gameCreationState';
 import { generateNewGame, selectGameState, setBlockInput } from '../state/gameState';
 import constants from '../utils/constants';
-import NumberSelector from './NumberSelector';
+import NumberSelector from '../components/NumberSelector/NumberSelector';
 
 export const CreateCustomGameModal = ({
   onClose,

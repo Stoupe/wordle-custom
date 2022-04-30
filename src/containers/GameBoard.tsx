@@ -13,7 +13,7 @@ import {
   toggleCheatMode
 } from '../state/gameState';
 import { asString, isValidGuess } from '../utils';
-import LetterBox from './LetterBox';
+import LetterBox from '../components/LetterBox/LetterBox';
 
 const GameBoard = (): ReactElement => {
   const {

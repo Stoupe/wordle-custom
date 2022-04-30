@@ -3,7 +3,7 @@ import { NotificationsProvider } from '@mantine/notifications';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
 import App from './App';
 import './index.css';
@@ -16,9 +16,7 @@ const Main = () => (
         <QueryParamProvider>
           <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles>
             <NotificationsProvider position="top-right">
-              <Routes>
-                <Route path="/" element={<App />} />
-              </Routes>
+              <App />
             </NotificationsProvider>
           </MantineProvider>
         </QueryParamProvider>
