@@ -1,7 +1,7 @@
 import { Center, Space } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useEffect } from 'react';
-import { Check } from 'tabler-icons-react';
+import { Check, Loader } from 'tabler-icons-react';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
 import GameBoard from '../containers/GameBoard';
 import { HeaderBar } from '../containers/HeaderBar';
@@ -33,7 +33,8 @@ const Home = () => {
     showNotification({
       title: 'Generating new game...',
       message: '',
-      color: 'blue'
+      color: 'blue',
+      icon: <Loader />
     });
 
     const boundNumBetween = (num: number, min: number, max: number) =>
