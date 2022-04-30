@@ -1,19 +1,23 @@
-import { Button, Center, Container, Text } from '@mantine/core';
-import { cleanNotifications } from '@mantine/notifications';
+import { ActionIcon, Button, Center, Container, Group, Text } from '@mantine/core';
+import { useClipboard } from '@mantine/hooks';
+import { cleanNotifications, showNotification } from '@mantine/notifications';
 import { useState } from 'react';
-import { Refresh } from 'tabler-icons-react';
+import { Clipboard, Plus, Refresh, Share } from 'tabler-icons-react';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { useSeed } from '../hooks/useSeed';
 import { selectGameCreationState } from '../state/gameCreationState';
 import { generateNewGame, selectGameState } from '../state/gameState';
 import { CreateCustomGameModal } from './CreateCustomGameModal';
 
 export const HeaderBar = () => {
   const options = useAppSelector(selectGameCreationState);
-  const { maxGuesses, wordLength } = useAppSelector(selectGameState);
+  const { maxGuesses, wordLength, correctWord } = useAppSelector(selectGameState);
   const dispatch = useAppDispatch();
 
   const [modalOpen, setModalOpen] = useState(false);
   const closeModal = () => setModalOpen(false);
+  const clipboard = useClipboard();
+  const { generateSeed } = useSeed();
 
   return (
     <Center
@@ -30,12 +34,13 @@ export const HeaderBar = () => {
       <CreateCustomGameModal isOpen={modalOpen} onClose={closeModal} />
 
       <Button
-        variant="gradient"
-        gradient={{ from: 'blue', to: 'purple' }}
-        radius={'md'}
+        variant="filled"
+        color="gray"
+        size="sm"
+        leftIcon={<Plus />}
         onClick={() => setModalOpen(true)}
       >
-        Create Custom Game
+        Custom Game
       </Button>
 
       <Container>
@@ -43,20 +48,37 @@ export const HeaderBar = () => {
         <Text color="grey">Length: {wordLength}</Text>
       </Container>
 
-      {/* <Button color="dark">Share</Button> */}
+      <Group>
+        <ActionIcon
+          variant="filled"
+          size="xl"
+          onClick={() => {
+            const shareUrl = `${
+              window.location.href
+            }?g=${maxGuesses}&l=${wordLength}&seed=${generateSeed(correctWord)}`;
+            clipboard.copy(shareUrl);
+            showNotification({
+              title: 'Link Copied to Clipboard',
+              message: shareUrl,
+              color: 'green',
+              icon: <Clipboard />
+            });
+          }}
+        >
+          <Share />
+        </ActionIcon>
 
-      <Button
-        variant="filled"
-        radius="md"
-        color="dark"
-        rightIcon={<Refresh />}
-        onClick={() => {
-          cleanNotifications();
-          dispatch(generateNewGame(options));
-        }}
-      >
-        New Game
-      </Button>
+        <ActionIcon
+          variant="filled"
+          size="xl"
+          onClick={() => {
+            cleanNotifications();
+            dispatch(generateNewGame(options));
+          }}
+        >
+          <Refresh />
+        </ActionIcon>
+      </Group>
     </Center>
   );
 };

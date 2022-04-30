@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Hashids from 'hashids';
 
 const hashids = new Hashids();
