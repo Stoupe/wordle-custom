@@ -1,13 +1,16 @@
 import { MantineProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
 import App from './App';
 import './index.css';
 import { store } from './store';
+
+// React 18
+// import { createRoot } from 'react-dom/client';
 
 const Main = () => (
   <React.StrictMode>
@@ -26,5 +29,8 @@ const Main = () => (
 );
 
 const container = document.getElementById('root');
-const root = createRoot(container!);
-root.render(<Main />);
+ReactDOM.render(<Main />, container);
+
+// const container = document.getElementById('root');
+// const root = createRoot(container!);
+// root.render(<Main />);
