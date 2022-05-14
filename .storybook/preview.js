@@ -11,8 +11,6 @@ export const parameters = {
   }
 };
 
-
-
 export const decorators = [
   (Story) => {
     const [colorScheme, setColorScheme] = useState('light');
