@@ -3,7 +3,20 @@ module.exports = {
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
-    '@storybook/addon-interactions'
+    '@storybook/addon-interactions',
+    '@storybook/addon-a11y'
   ],
-  framework: '@storybook/react'
+  framework: '@storybook/react',
+  // features: {
+    // storyStoreV7: true
+  // },
+  // core: {
+  //   builder: {
+  //     name: 'webpack5',
+  //     options: {
+  //       fsCache: true,
+  //       lazyCompilation: true
+  //     }
+  //   }
+  // }
 };

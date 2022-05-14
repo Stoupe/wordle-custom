@@ -17,7 +17,7 @@ const Main = () => (
     <Provider store={store}>
       <BrowserRouter>
         <QueryParamProvider>
-          <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles>
+          <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
             <NotificationsProvider position="top-right">
               <App />
             </NotificationsProvider>
