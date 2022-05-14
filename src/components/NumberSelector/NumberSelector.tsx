@@ -1,13 +1,36 @@
 import { Box, Button, Group, Text } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { Minus, Plus } from 'tabler-icons-react';
 
 interface NumberSelectorProps {
   title: string;
-  value: number;
   onChange: (value: number) => void;
+  initialValue?: number;
+  min?: number;
+  max?: number;
 }
 
-const NumberSelector = ({ title, value, onChange }: NumberSelectorProps) => {
+const NumberSelector = ({ title, initialValue = 0, min, max, onChange }: NumberSelectorProps) => {
+  const [val, setVal] = useState(initialValue);
+
+  const incrementVal = () =>
+    setVal((current) => {
+      if (max === undefined) return current;
+      if (current + 1 > max) return current;
+      return current + 1;
+    });
+
+  const decrementVal = () =>
+    setVal((current) => {
+      if (min === undefined) return current;
+      if (current - 1 < min) return current;
+      return current - 1;
+    });
+
+  useEffect(() => {
+    onChange(val);
+  }, [val]);
+
   return (
     <Box
       sx={{
@@ -23,11 +46,11 @@ const NumberSelector = ({ title, value, onChange }: NumberSelectorProps) => {
           marginTop: '0.5rem'
         }}
       >
-        <Button compact color={'dark'} onClick={() => onChange(value - 1)}>
+        <Button compact color={'dark'} onClick={decrementVal}>
           <Minus />
         </Button>
-        <Text>{value ?? '?'}</Text>
-        <Button compact color={'dark'} onClick={() => onChange(value + 1)}>
+        <Text>{val}</Text>
+        <Button compact color={'dark'} onClick={incrementVal}>
           <Plus />
         </Button>
       </Group>

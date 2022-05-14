@@ -79,22 +79,18 @@ export const CreateCustomGameModal = ({
       <Container>
         <NumberSelector
           title="Max Guesses"
-          value={options.maxGuesses}
-          onChange={(newMaxGuesses) =>
-            newMaxGuesses >= MIN_GUESSES &&
-            newMaxGuesses <= MAX_GUESSES &&
-            dispatch(setMaxGuesses(newMaxGuesses))
-          }
+          initialValue={options.maxGuesses}
+          min={MIN_GUESSES}
+          max={MAX_GUESSES}
+          onChange={(newMaxGuesses) => dispatch(setMaxGuesses(newMaxGuesses))}
         />
 
         <NumberSelector
           title="Word Length"
-          value={options.wordLength}
-          onChange={(newLength) =>
-            newLength <= MAX_WORD_LENGTH &&
-            newLength >= MIN_WORD_LENGTH &&
-            dispatch(setWordLength(newLength))
-          }
+          initialValue={options.wordLength}
+          min={MIN_WORD_LENGTH}
+          max={MAX_WORD_LENGTH}
+          onChange={(newLength) => dispatch(setWordLength(newLength))}
         />
 
         <Text weight="bold" mt="1rem" mb="0.5rem">
