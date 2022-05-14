@@ -8,16 +8,18 @@ module.exports = {
     'storybook-dark-mode'
   ],
   framework: '@storybook/react',
-  // features: {
-    // storyStoreV7: true
-  // },
-  // core: {
-  //   builder: {
-  //     name: 'webpack5',
-  //     options: {
-  //       fsCache: true,
-  //       lazyCompilation: true
-  //     }
-  //   }
-  // }
+  features: {
+    storyStoreV7: true,
+    // babelModeV7: true,
+    previewMdx2: true
+  },
+  core: {
+    builder: {
+      name: 'webpack5',
+      options: {
+        fsCache: true,
+        lazyCompilation: true
+      }
+    }
+  }
 };
