@@ -12,6 +12,11 @@ import { store } from './store';
 // React 18
 // import { createRoot } from 'react-dom/client';
 
+if (!import.meta.env.PROD) {
+  const { default: axe } = await import('@axe-core/react');
+  axe(React, ReactDOM, 1000);
+}
+
 const Main = () => (
   <React.StrictMode>
     <Provider store={store}>
