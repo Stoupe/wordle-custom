@@ -2,7 +2,7 @@ import { MantineProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
 import App from './App';
@@ -19,7 +19,7 @@ if (!import.meta.env.PROD) {
 
 const Main = () => (
   <React.StrictMode>
-    <Provider store={store}>
+    <ReduxProvider store={store}>
       <BrowserRouter>
         <QueryParamProvider>
           <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
@@ -29,7 +29,7 @@ const Main = () => (
           </MantineProvider>
         </QueryParamProvider>
       </BrowserRouter>
-    </Provider>
+    </ReduxProvider>
   </React.StrictMode>
 );
 

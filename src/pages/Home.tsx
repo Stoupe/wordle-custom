@@ -3,7 +3,7 @@ import { showNotification } from '@mantine/notifications';
 import { useEffect } from 'react';
 import { Check, Loader } from 'tabler-icons-react';
 import { NumberParam, StringParam, useQueryParams } from 'use-query-params';
-import GameBoard from '../containers/GameBoard';
+import { GameBoard } from '../containers';
 import { HeaderBar } from '../containers/HeaderBar';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { useSeed } from '../hooks/useSeed';
@@ -13,7 +13,8 @@ import constants from '../utils/constants';
 
 const Home = () => {
   const options = useAppSelector(selectGameCreationState);
-  const { maxGuesses, wordLength, correctWord } = useAppSelector(selectGameState);
+  const gameState = useAppSelector(selectGameState);
+  const { maxGuesses, wordLength, correctWord } = gameState;
 
   const dispatch = useAppDispatch();
 
@@ -94,7 +95,7 @@ const Home = () => {
       })}
     >
       <HeaderBar />
-      <GameBoard />
+      <GameBoard gameState={gameState} />
     </Center>
   );
 };

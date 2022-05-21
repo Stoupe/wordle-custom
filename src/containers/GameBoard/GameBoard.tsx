@@ -3,19 +3,39 @@ import { showNotification } from '@mantine/notifications';
 import confetti from 'canvas-confetti';
 import { ReactElement, useEffect } from 'react';
 import { Confetti, ExclamationMark, Eye, EyeOff, MoodCry } from 'tabler-icons-react';
-import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { useSeed } from '../hooks/useSeed';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useSeed } from '../../hooks/useSeed';
 import {
   addToCurrentGuess,
   backspaceGuess,
+  generateNewGame,
   processGuess,
   selectGameState,
   toggleCheatMode
-} from '../state/gameState';
-import { asString, isValidGuess } from '../utils';
-import LetterBox from '../components/LetterBox/LetterBox';
+} from '../../state/gameState';
+import { asString, isValidGuess } from '../../utils';
+import LetterBox from '../../components/LetterBox/LetterBox';
+import { GameState } from '../../models/gameState';
 
-const GameBoard = (): ReactElement => {
+interface GameBoardProps {
+  gameState: GameState;
+}
+
+const GameBoard = ({ gameState }: GameBoardProps): ReactElement => {
+  // const {
+  //   isLoading,
+  //   currentGuess,
+  //   maxGuesses,
+  //   gameWon,
+  //   gameLost,
+  //   prevGuesses,
+  //   wordLength,
+  //   cheatMode,
+  //   correctWord,
+  //   gameWordList,
+  //   blockInput
+  // } = useAppSelector(selectGameState);
+
   const {
     isLoading,
     currentGuess,
@@ -28,7 +48,7 @@ const GameBoard = (): ReactElement => {
     correctWord,
     gameWordList,
     blockInput
-  } = useAppSelector(selectGameState);
+  } = gameState;
 
   const dispatch = useAppDispatch();
   const { generateSeed } = useSeed();
