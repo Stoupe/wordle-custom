@@ -9,8 +9,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'google',
-    'plugin:prettier/recommended',
-    'plugin:storybook/recommended'
+    'plugin:prettier/recommended'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -22,8 +21,7 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
-    'react/react-in-jsx-scope': 'off',
-    'valid-jsdoc': 'off'
+    'react/react-in-jsx-scope': 'off'
   },
   settings: {
     react: {
